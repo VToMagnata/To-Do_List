@@ -20,7 +20,6 @@ export function Task({ id, name, description, done, Remove, MarcaConcluido }) {
         >
           Feita
         </button>
-
         <button
           className="font-bold bg-white text-[#cc4b4b] border-2 border-[#cc4b4b] p-[0.1em] w-[5em] rounded-[1em] h-[2em]"
           onClick={() => Remove(id)}

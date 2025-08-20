@@ -1,37 +1,31 @@
+// App.jsx
+import { useRecoilState } from "recoil";
+import { tasksState } from "./state/tasksState";
 import { Task } from "./components/Task";
 import { TaskAdd } from "./components/TaskAdd";
-import { useState, useMemo } from "react";
-import { TaskContext } from "./Context/TaksContext";
-import { useLocalStorage } from "./Hooks/useLocalStorage";
+import { useMemo, useState } from "react";
 
 function App() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [filtro, setFiltro] = useState("");
-  const [tasks, setTasks] = useLocalStorage("tasks", []);
+  const [tasks, setTasks] = useRecoilState(tasksState);
+  const [filtro, setFiltro] = useState("todas");
 
   const addList = (name, description) => {
-    if (name.trim() === "") return;
-
-    const NewTask = {
+    const newTask = {
       id: Date.now(),
       name,
       description,
       done: false,
     };
-
-    setTasks((mont) => [...mont, NewTask]);
-    setName("");
-    setDescription("");
+    setTasks((prev) => [...prev, newTask]);
   };
 
   const Remove = (id) => {
-    setTasks((mont) => mont.filter((item) => item.id !== id));
+    setTasks((prev) => prev.filter((item) => item.id !== id));
   };
 
   const MarcaConcluido = (id) => {
-    setTasks((mont) =>
-      mont.map((item) =>
+    setTasks((prev) =>
+      prev.map((item) =>
         item.id === id ? { ...item, done: !item.done } : item
       )
     );
@@ -46,46 +40,32 @@ function App() {
   }, [tasks, filtro]);
 
   return (
-    <TaskContext.Provider
-      value={{
-        name,
-        description,
-        setName,
-        setDescription,
-        addList,
-        Remove,
-        MarcaConcluido,
-        filtro,
-        setFiltro,
-      }}
-    >
-      <div className="h-screen flex justify-center items-center">
-        <main className="h-auto w-[95%] bg-[#2F2F2F] rounded-[3em] flex flex-col justify-start items-center p-[1em] mb-[2em]">
-          <h1
-            className="text-center text-white text-[3em]"
-            style={{ fontFamily: "Brusher, cursive" }}
-          >
-            To Do List
-          </h1>
+    <div className="h-screen flex justify-center items-center">
+      <main className="h-auto w-[95%] bg-[#2F2F2F] rounded-[3em] flex flex-col justify-start items-center p-[1em] mb-[2em]">
+        <h1
+          className="text-center text-white text-[3em]"
+          style={{ fontFamily: "Brusher, cursive" }}
+        >
+          To Do List
+        </h1>
 
-          <TaskAdd />
+        <TaskAdd addList={addList} filtro={filtro} setFiltro={setFiltro} />
 
-          <div className="w-auto h-auto flex flex-col items-center">
-            {tarefasFiltradas.map((item) => (
-              <Task
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                description={item.description}
-                done={item.done}
-                Remove={Remove}
-                MarcaConcluido={MarcaConcluido}
-              />
-            ))}
-          </div>
-        </main>
-      </div>
-    </TaskContext.Provider>
+        <div className="w-auto h-auto flex flex-col items-center">
+          {tarefasFiltradas.map((item) => (
+            <Task
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              description={item.description}
+              done={item.done}
+              Remove={Remove}
+              MarcaConcluido={MarcaConcluido}
+            />
+          ))}
+        </div>
+      </main>
+    </div>
   );
 }
 

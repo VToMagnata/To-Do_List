@@ -1,16 +1,16 @@
-import { useContext } from "react";
-import { TaskContext } from "../Context/TaksContext";
+// components/TaskAdd.jsx
+import { useState } from "react";
 
-export function TaskAdd() {
-  const {
-    name,
-    description,
-    setDescription,
-    addList,
-    setName,
-    filtro,
-    setFiltro,
-  } = useContext(TaskContext);
+export function TaskAdd({ addList, filtro, setFiltro }) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  const handleAdd = () => {
+    if (name.trim() === "") return;
+    addList(name, description);
+    setName("");
+    setDescription("");
+  };
 
   return (
     <div className="w-[21em] h-[40%] bg-[#3B3B3B] flex flex-col items-center justify-center p-[1.2em] gap-[1em] rounded-xl mb-[2em] lg:w-[60%] lg:flex-row lg:justify-start">
@@ -30,7 +30,7 @@ export function TaskAdd() {
       />
       <select
         value={filtro}
-        onChange={(inf) => setFiltro(inf.target.value)}
+        onChange={(e) => setFiltro(e.target.value)}
         className="border-[#ffaa00] border-2 rounded-xl text-center appearance-none font-bold text-[#ffaa00]"
       >
         <option value="todas">Todas</option>
@@ -39,7 +39,7 @@ export function TaskAdd() {
       </select>
       <button
         className="font-bold text-white bg-[#ffaa00] rounded-xl p-1 whitespace-nowrap"
-        onClick={() => addList(name, description)}
+        onClick={handleAdd}
       >
         Add Task
       </button>
