@@ -10,7 +10,7 @@ Projeto simples de lista de tarefas desenvolvido com React, que permite adiciona
 - Interface responsiva e estilizada com Tailwind CSS.
 
 ## Tecnologias utilizadas
-- React (Hooks, Context API)
+- Recoil
 - Tailwind CSS
 
 ## Como usar
